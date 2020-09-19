@@ -6,3 +6,17 @@ iOS14上，popToRoot或者popTo指定控制器，立马去拿viewControllers属�
 Demo运行过程：
   点击红色页面时会push至黄色页面，停留3s后又push黄色页面，持续3次，待不再push时，点击pop页面会进行popToRoot操作，可以看到tabbar并未被隐藏；
 Demo中主要文件TianMuiOS14BugFix，拖拽至项目中即可，就不做cocoapods了
+
+另一种解决方法:
+  - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if (self.viewControllers.count > 0) {
+    	  // 当前导航栏, 只有第一个viewController push的时候设置隐藏
+        if (self.viewControllers.count == 1) {
+            viewController.hidesBottomBarWhenPushed = YES;
+        }
+    } else {
+        viewController.hidesBottomBarWhenPushed = NO;
+    }
+    [super pushViewController:viewController animated:animated];
+}
+栈为[A,B,C,D]页面，系统每次显示与隐藏都是反向遍历，获取属性，push每次最后拿到的是B的hidesBottomBarWhenPushed为YES，隐藏tabbar，当popToRoot时,栈变成了[D,A]，反向遍历拿到的是D，D这个时候的hidesBottomBarWhenPushed为NO，就显示了tabbar
