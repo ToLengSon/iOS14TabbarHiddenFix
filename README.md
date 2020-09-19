@@ -9,14 +9,13 @@ Demo中主要文件TianMuiOS14BugFix，拖拽至项目中即可，就不做cocoa
 
 另一种解决方法:
 ```objective-c
-  - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    if (self.viewControllers.count > 0) {
-    	  // 当前导航栏, 只有第一个viewController push的时候设置隐藏
-        if (self.viewControllers.count == 1) {
-            viewController.hidesBottomBarWhenPushed = YES;
-        }
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+  if (self.viewControllers.count > 0) {
+    // 当前导航栏, 只有第一个viewController push的时候设置隐藏
+    if (self.viewControllers.count == 1) {
+      viewController.hidesBottomBarWhenPushed = YES;
     } else {
-        viewController.hidesBottomBarWhenPushed = NO;
+      viewController.hidesBottomBarWhenPushed = NO;
     }
     [super pushViewController:viewController animated:animated];
 }
