@@ -10,7 +10,13 @@ Demo中主要文件TianMuiOS14BugFix，拖拽至项目中即可，就不做cocoa
 另一种解决方法:
 ```objective-c
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
-  viewController.hidesBottomBarWhenPushed = self.viewControllers.count == 1;
+  if (@available(iOS 14.0, *)) {
+    if (self.viewControllers.count > 1) {
+      self.viewControllers[1].hidesBottomBarWhenPushed = YES;
+    } else {
+      viewController.hidesBottomBarWhenPushed = self.viewControllers.count == 1;
+    }
+  }
   [super pushViewController:viewController animated:animated];
 }
 ```
