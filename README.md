@@ -19,4 +19,26 @@ Demo中主要文件TianMuiOS14BugFix，拖拽至项目中即可，就不做cocoa
   [super pushViewController:viewController animated:animated];
 }
 ```
+另一种解决方案
+```objective-c
+- (NSArray<__kindof UIViewController *> *)popToRootViewControllerAnimated:(BOOL)animated {
+    if (@available(iOS 14, *)) {
+        self.topViewController.hidesBottomBarWhenPushed = NO;
+    }
+    NSArray<__kindof UIViewController *> *vcs = [super popToRootViewControllerAnimated:animated];
+    return vcs;
+}
+
+- (NSArray<__kindof UIViewController *> *)popToViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if (@available(iOS 14, *)) {
+        if (viewController == self.viewControllers.firstObject) {
+            self.topViewController.hidesBottomBarWhenPushed = NO;
+        } else {
+            viewController.hidesBottomBarWhenPushed = YES;
+        }
+    }
+    NSArray<__kindof UIViewController *> *vcs = [super popToViewController:viewController animated:animated];
+    return vcs;
+}
+```
 栈为[A,B,C,D]页面，系统每次显示与隐藏都是反向遍历，获取属性，push每次最后拿到的是B的hidesBottomBarWhenPushed为YES，隐藏tabbar，当popToRoot时,栈变成了[D,A]，反向遍历拿到的是D，D这个时候的hidesBottomBarWhenPushed为NO，就显示了tabbar
