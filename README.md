@@ -7,8 +7,9 @@ Demo运行过程：
   点击红色页面时会push至黄色页面，停留3s后又push黄色页面，持续3次，待不再push时，点击pop页面会进行popToRoot操作，可以看到tabbar并未被隐藏；
 Demo中主要文件TianMuiOS14BugFix，拖拽至项目中即可，就不做cocoapods了
 
-另一种解决方法:
+解决方法1:
 ```objective-c
+// 如果popTo之后立马调用pushViewController此时之前的C控制器还未从导航栈中移除，可以延时0.5秒左右让pop动画完成(系统动画默认0.25s)再push，或者直接使用解决方案2
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
   if (@available(iOS 14.0, *)) {
     if (self.viewControllers.count > 1) {
@@ -19,7 +20,7 @@ Demo中主要文件TianMuiOS14BugFix，拖拽至项目中即可，就不做cocoa
   [super pushViewController:viewController animated:animated];
 }
 ```
-另一种解决方案
+解决方案2
 ```objective-c
 - (NSArray<__kindof UIViewController *> *)popToRootViewControllerAnimated:(BOOL)animated {
     if (@available(iOS 14, *)) {
